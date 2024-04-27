@@ -1,5 +1,6 @@
 [![codecov](https://codecov.io/gh/Talento90/goliath/graph/badge.svg?token=4AIPK4UXUO)](https://codecov.io/gh/Talento90/goliath)
 ![build](https://github.com/Talento90/goliath/workflows/build/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Talento90/goliath)](https://goreportcard.com/report/github.com/Talento90/goliath)
 
 <h1 align="center">
     Goliath
