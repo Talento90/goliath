@@ -18,9 +18,9 @@ benchmark:
 
 ## coverage: ☂️  Generate coverage report
 .PHONY: coverage
-coverage:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=/tmp/coverage.out -covermode=atomic
-	go tool cover -html=/tmp/coverage.out
+coverage:																	 
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.out -covermode=atomic
+	go tool cover -html=coverage.out
 
 ## format: 🎨 Fix code format issues
 .PHONY: format
