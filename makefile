@@ -4,9 +4,9 @@ help:
 	@echo '⚡️ Goliath:'
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-## audit: 🚀 Conduct quality checks
-.PHONY: audit
-audit:
+## quality: 🚀 Conduct quality checks
+.PHONY: quality
+quality:
 	go mod verify
 	go vet ./...
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
