@@ -4,9 +4,9 @@ help:
 	@echo '⚡️ Goliath:'
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-## audit: 🚀 Conduct quality checks
-.PHONY: audit
-audit:
+## quality: 🚀 Conduct quality checks
+.PHONY: quality
+quality:
 	go mod verify
 	go vet ./...
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
@@ -18,9 +18,9 @@ benchmark:
 
 ## coverage: ☂️  Generate coverage report
 .PHONY: coverage
-coverage:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=/tmp/coverage.out -covermode=atomic
-	go tool cover -html=/tmp/coverage.out
+coverage:																	 
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.out -covermode=atomic
+	go tool cover -html=coverage.out
 
 ## format: 🎨 Fix code format issues
 .PHONY: format
