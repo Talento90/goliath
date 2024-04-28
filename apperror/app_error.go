@@ -58,6 +58,7 @@ type AppError struct {
 	errType          Type
 	severity         Severity
 	message          string
+	detail           string
 	cause            error
 	validationErrors ValidationErrors
 }
@@ -90,6 +91,17 @@ func (e AppError) Severity() Severity {
 // Set the original error severity
 func (e AppError) SetSeverity(severity Severity) AppError {
 	e.severity = severity
+	return e
+}
+
+// Get the error detail
+func (e AppError) Detail() string {
+	return e.detail
+}
+
+// Set the erro detail
+func (e AppError) SetDetail(detail string) AppError {
+	e.detail = detail
 	return e
 }
 

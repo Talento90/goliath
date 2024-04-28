@@ -23,7 +23,6 @@ func TestNewNoLocation(t *testing.T) {
 
 func TestNewWithLocation(t *testing.T) {
 	loc, err := time.LoadLocation("Asia/Shanghai")
-
 	if err != nil {
 		t.Error(err)
 	}

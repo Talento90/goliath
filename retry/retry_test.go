@@ -17,7 +17,7 @@ func (m *mockSleep) Sleep(d time.Duration) {
 }
 
 func TestExecuteSuccessNoRetries(t *testing.T) {
-	var task = func() (string, error) {
+	task := func() (string, error) {
 		return "my result", nil
 	}
 
@@ -35,7 +35,7 @@ func TestExecuteSuccessNoRetries(t *testing.T) {
 }
 
 func TestExecuteSuccessNoRetriesWithDefaultConstructor(t *testing.T) {
-	var task = func() (string, error) {
+	task := func() (string, error) {
 		return "my result", nil
 	}
 
@@ -49,8 +49,7 @@ func TestExecuteSuccessAfterRetries(t *testing.T) {
 	expectedErr := errors.New("Couldn't fetch to the database")
 	retryCounter := 0
 
-	var task = func() (string, error) {
-
+	task := func() (string, error) {
 		if retryCounter == 2 {
 			return "My result", nil
 		}
@@ -78,8 +77,7 @@ func TestExecuteSuccessAfterRetriesWithCustomExponentialBackoff(t *testing.T) {
 	expectedErr := errors.New("Couldn't fetch to the database")
 	retryCounter := 0
 
-	var task = func() (string, error) {
-
+	task := func() (string, error) {
 		if retryCounter == 2 {
 			return "My result", nil
 		}
@@ -109,7 +107,7 @@ func TestExecuteSuccessAfterRetriesWithCustomExponentialBackoff(t *testing.T) {
 func TestExecuteAlwaysError(t *testing.T) {
 	expectedErr := errors.New("Couldn't connect to the database")
 
-	var task = func() (int, error) {
+	task := func() (int, error) {
 		return 0, expectedErr
 	}
 

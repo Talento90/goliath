@@ -8,11 +8,11 @@ import (
 
 // Config retry mechanism
 type Config struct {
-	//Number of retries to be applied
+	// Number of retries to be applied
 	Times int
-	//ExponentialBackoff function that calculates the retry delay
+	// ExponentialBackoff function that calculates the retry delay
 	ExponentialBackoff func(retryCount int) time.Duration
-	//Sleeper pauses the execution of the current go routine for x milliseconds
+	// Sleeper pauses the execution of the current go routine for x milliseconds
 	Sleeper sleep.Sleeper
 }
 

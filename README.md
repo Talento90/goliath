@@ -2,10 +2,8 @@
 [![codecov](https://codecov.io/gh/Talento90/goliath/graph/badge.svg?token=4AIPK4UXUO)](https://codecov.io/gh/Talento90/goliath)
 ![build](https://github.com/Talento90/goliath/workflows/build/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Talento90/goliath)](https://goreportcard.com/report/github.com/Talento90/goliath)
+[![GoDoc](https://godoc.org/github.com/Talento90/goliath?status.svg)](https://godoc.org/github.com/Talento90/goliath)
 
-<p align="center">
-    
-</p>
 <p align="center">
     <img src="./assets/logo.png" alt="logo" width="200" >
 </p>
@@ -25,6 +23,7 @@ Goliath is an opinionated set of libraries to build resiliant, scalable and main
 - [retry](/retry/) - retry a specific task securely
 - [clock](/clock) - wrapper around `time.Now` to help during testing
 - [sleep](/sleep) - wrapper around `time.Sleep` for testing
+- [httperror](/httperror) - implementation of the [RFC7807 Problem Details](https://datatracker.ietf.org/doc/html/rfc7807)
 
 # 👀 Examples
 
@@ -91,6 +90,30 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	sleeper.Sleep(1000)
 ```
 
+
+### httperror
+```go
+	appCtx := appcontext.FromContext(ctx)
+	err := apperror.NewValidation("invalid_payment_data", "The payment request is invalid")
+	err.AddValidationError(apperror.NewValidationError("amount", "Amount needs to be positive"))
+	err.AddValidationError(apperror.NewValidationError("currency", "currency is required"))
+
+	httpErr := New(appCtx, err, "/payments")
+```
+*Problem Detail Output*
+```json
+{
+  "type": "invalid_payment_data",
+  "title": "The payment request is invalid",
+  "status": 400,
+  "instance": "/payments",
+  "traceId": "9b1b4579-b455-4eed-ac80-923668593dcc",
+  "errors": {
+    "amount": ["Amount needs to be positive"],
+    "currency": ["currency is required"]
+  }
+}
+```
 
 
 
