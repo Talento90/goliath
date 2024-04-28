@@ -8,12 +8,13 @@ import (
 )
 
 func TestNewAppError(t *testing.T) {
-	err := New("error_code", Internal, High, "Error while running the test")
+	err := New("error_code", Internal, High, "Error while running the test").SetDetail("More context about the error")
 
 	assert.Equal(t, "error_code", err.Code())
 	assert.Equal(t, Internal, err.Type())
 	assert.Equal(t, High, err.Severity())
 	assert.Equal(t, "Error while running the test", err.Error())
+	assert.Equal(t, "More context about the error", err.Detail())
 	assert.NoError(t, err.Cause())
 }
 
