@@ -14,7 +14,7 @@
 
 # 📝 Summary
 
-Goliath is an opinionated set of libraries to build resiliant, scalable and maintable applications. The goal of these libraries is to allow focusing on building applications instead of reinventing the wheel.
+Goliath is an opinionated set of libraries to build resilient, scalable and maintainable applications. The goal of these libraries is to allow focusing on building applications instead of reinventing the wheel.
 
 # 🚀 Features
 
