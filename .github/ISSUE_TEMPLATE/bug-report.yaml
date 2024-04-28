@@ -1,0 +1,38 @@
+name: "\U0001F41B Bug Report"
+title: "\U0001F41B [Bug]: "
+description: Create a bug report to help us fix it.
+labels: ["Bug"]
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description"
+      description: "A clear and detailed description of what the bug is."
+      placeholder: "Explain your problem clearly and in detail."
+    validations:
+      required: true
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: How to Reproduce
+      description: "Steps to reproduce the behavior and what should be observed in the end."
+      placeholder: "Tell us step by step how we can replicate your problem and what we should see in the end."
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: "A clear and detailed description of what you think should happen."
+      placeholder: "Tell us what is the expected behaviour."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: "Goliath Version"
+      description: "Some bugs may be fixed in future Goliath releases."
+      placeholder: "Write your Goliath version. (v0.1.0, ...)"
+    validations:
+      required: true

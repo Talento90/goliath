@@ -14,14 +14,21 @@
     <img src="./assets/goliath.webp" alt="goliath" width="250" >
 </p>
 
-## Summary
+# 📝 Summary
 
 Goliath is an opinionated set of libraries to build resiliant, scalable and maintable applications. The goal of these libraries is to allow focusing on building applications instead of reinventing the wheel.
 
+# 🚀 Features
 
-## Usage
+- [apperror](/apperror) - create elegant application errors
+- [appcontext](/appcontext/) - wrapper around the native `ctx.Context`
+- [retry](/retry/) - retry a specific task securely
+- [clock](/clock) - wrapper around `time.Now` to help during testing
+- [sleep](/sleep) - wrapper around `time.Sleep` for testing
 
-### apperror - create elegant application errors
+# 👀 Examples
+
+### apperror
 ```go
 // create application errors
 err := NewValidation("validate_user", "Error Validating User")
@@ -36,7 +43,7 @@ if err != nil {
 }
 ```
 
-### appcontext - wrapper around the native ctx.Context
+### appcontext
 ```go
 func Hello(w http.ResponseWriter, r *http.Request) {
     ctx := appcontext.FromContext(r.Context())
@@ -49,7 +56,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-### retry - retry a specific task securely
+### retry
 ```go
 	var GetPersonTask = func() (Person, error) {
         var p Person
@@ -69,10 +76,16 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 	result, err := retry.Execute(config, task)
 ```
 
-### clock - wrapper around time.Now to help during testing
+### clock
 ```go
 	clock := NewUtcClock()
 	timeNowUtc := clock.Now().Format(time.RFC822)
+```
+
+### sleep
+```go
+	sleeper := sleep.New()
+	sleeper.Sleep(1000)
 ```
 
 

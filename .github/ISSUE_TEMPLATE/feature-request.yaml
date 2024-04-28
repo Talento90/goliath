@@ -1,0 +1,24 @@
+name: "📝 Feature Proposal"
+title: "📝 [Proposal]: "
+description: Propose a feature or improvement for Goliath.
+labels: ["📝 Proposal", "✏️ Feature"]
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Feature Proposal Description"
+      description: "A clear and detailed description of the feature you are proposing for Goliath. How should it work, and wha methods would it involve?"
+      placeholder: "Describe your feature proposal clearly and in detail."
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: "Feature Examples"
+      description: "Provide concrete examples and code snippets to illustrate how the proposed feature should function."
+      placeholder: "Share code snippets that exemplify the proposed feature and its usage."
+      render: go
+    validations:
+      required: true
