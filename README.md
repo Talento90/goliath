@@ -31,7 +31,7 @@ Goliath is an opinionated set of libraries to build resiliant, scalable and main
 ### apperror
 ```go
 // create application errors
-err := NewValidation("validate_user", "Error Validating User")
+err := apperror.NewValidation("validate_user", "Error Validating User")
 err.AddValidationError(NewValidationError("name", "name is empty"))
 err.AddValidationError(NewValidationError("age", "user is under 18", "user must be an adult"))
 
@@ -39,8 +39,11 @@ err.AddValidationError(NewValidationError("age", "user is under 18", "user must 
 conn, err := db.Connect(...)
 
 if err != nil {
-   return NewInternal("database_connection", "Error connecting to the database").Wrap(err)
+   return apperror.NewInternal("database_connection", "Error connecting to the database").SetSeverity(apperror.Critical).Wrap(err)
 }
+
+// create a raw error
+err := apperror.New(("error_code", apperror.Internal, apperror.High, "Error message"))
 ```
 
 ### appcontext
