@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Talento90/goliath/appcontext"
-	"github.com/Talento90/goliath/apperror"
+	"github.com/Talento90/goliath/app"
 )
 
 // Problem Details for HTTP APIs - https://datatracker.ietf.org/doc/html/rfc7807
@@ -34,7 +33,7 @@ type ProblemDetails struct {
 	Status   int                       `json:"status,omitempty"`
 	Instance string                    `json:"instance,omitempty"`
 	TraceID  string                    `json:"traceId,omitempty"`
-	Errors   apperror.ValidationErrors `json:"errors,omitempty"`
+	Errors   app.FieldValidationErrors `json:"errors,omitempty"`
 }
 
 func (pd ProblemDetails) Error() string {
@@ -43,8 +42,8 @@ func (pd ProblemDetails) Error() string {
 
 const UnknownErrorType = "internal_error"
 
-func New(ctx appcontext.AppContext, err error, instance string) ProblemDetails {
-	appError, ok := err.(apperror.AppError)
+func New(ctx app.Context, err error, instance string) ProblemDetails {
+	appError, ok := err.(app.Error)
 
 	if !ok {
 		return ProblemDetails{
@@ -67,21 +66,21 @@ func New(ctx appcontext.AppContext, err error, instance string) ProblemDetails {
 	}
 }
 
-func mapAppErrorToHttpStatusCode(appError apperror.AppError) int {
+func mapAppErrorToHttpStatusCode(appError app.Error) int {
 	switch appError.Type() {
-	case apperror.Validation:
+	case app.Validation:
 		return http.StatusBadRequest
-	case apperror.NotFound:
+	case app.NotFound:
 		return http.StatusNotFound
-	case apperror.Permission:
+	case app.Permission:
 		return http.StatusForbidden
-	case apperror.Unauthorized:
+	case app.Unauthorized:
 		return http.StatusUnauthorized
-	case apperror.Conflict:
+	case app.Conflict:
 		return http.StatusConflict
-	case apperror.Timeout:
+	case app.Timeout:
 		return http.StatusRequestTimeout
-	case apperror.Cancelled:
+	case app.Cancelled:
 		return http.StatusAccepted
 	default:
 		return http.StatusInternalServerError

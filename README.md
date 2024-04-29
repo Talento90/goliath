@@ -18,8 +18,7 @@ Goliath is an opinionated set of libraries to build resilient, scalable and main
 
 # 🚀 Features
 
-- [apperror](/apperror) - create elegant application errors
-- [appcontext](/appcontext/) - wrapper around the native `ctx.Context`
+- [app](/app) - set of common utilities such as elegant errors and enriched `ctx.Context`
 - [retry](/retry/) - retry a specific task securely
 - [clock](/clock) - wrapper around `time.Now` to help during testing
 - [sleep](/sleep) - wrapper around `time.Sleep` for testing
@@ -27,28 +26,26 @@ Goliath is an opinionated set of libraries to build resilient, scalable and main
 
 # 👀 Examples
 
-### apperror
+### app
 ```go
-// create application errors
-err := apperror.NewValidation("validate_user", "Error Validating User")
-err.AddValidationError(NewValidationError("name", "name is empty"))
-err.AddValidationError(NewValidationError("age", "user is under 18", "user must be an adult"))
+// create elegant application errors
+err := app.NewValidation("validate_user", "Error Validating User")
+err.AddValidationError(NewFieldValidationError("name", "name is empty"))
+err.AddValidationError(NewFieldValidationError("age", "user is under 18", "user must be an adult"))
 
 // wrap the inner cause of the error
 conn, err := db.Connect(...)
 
 if err != nil {
-   return apperror.NewInternal("database_connection", "Error connecting to the database").SetSeverity(apperror.Critical).Wrap(err)
+   return app.NewInternalError("database_connection", "Error connecting to the database").SetSeverity(app.Critical).Wrap(err)
 }
 
 // create a raw error
-err := apperror.New(("error_code", apperror.Internal, apperror.High, "Error message"))
-```
+err := app.NewError(("error_code", app.Internal, app.High, "Error message"))
 
-### appcontext
-```go
+// enriched context
 func Hello(w http.ResponseWriter, r *http.Request) {
-    ctx := appcontext.FromContext(r.Context())
+    ctx := app.FromContext(r.Context())
     traceId := appCtx.TraceID()
     userID, checkUser := ctx.UserID()
 
@@ -93,10 +90,10 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 
 ### httperror
 ```go
-	appCtx := appcontext.FromContext(ctx)
-	err := apperror.NewValidation("invalid_payment_data", "The payment request is invalid")
-	err.AddValidationError(apperror.NewValidationError("amount", "Amount needs to be positive"))
-	err.AddValidationError(apperror.NewValidationError("currency", "currency is required"))
+	appCtx := app.FromContext(ctx)
+	err := app.NewValidationError("invalid_payment_data", "The payment request is invalid")
+	err.AddValidationError(app.NewFieldValidationError("amount", "Amount needs to be positive"))
+	err.AddValidationError(app.NewFieldValidationError("currency", "currency is required"))
 
 	httpErr := New(appCtx, err, "/payments")
 ```
