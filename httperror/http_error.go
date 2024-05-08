@@ -44,7 +44,7 @@ func (pd ProblemDetails) Error() string {
 const UnknownErrorType = "internal_error"
 
 func New(ctx app.Context, err error, instance string) ProblemDetails {
-	appError := app.Error{}
+	var appError *app.Error
 	ok := errors.As(err, &appError)
 
 	if !ok {
@@ -61,7 +61,7 @@ func New(ctx app.Context, err error, instance string) ProblemDetails {
 		Type:     appError.Code(),
 		Title:    appError.Error(),
 		Detail:   appError.Detail(),
-		Status:   mapAppErrorToHTTPStatusCode(appError),
+		Status:   mapAppErrorToHTTPStatusCode(*appError),
 		Instance: instance,
 		TraceID:  ctx.TraceID(),
 		Errors:   appError.ValidationErrors(),
