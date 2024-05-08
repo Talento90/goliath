@@ -65,7 +65,13 @@ func (sc *Context) SetTraceID(traceID string) *Context {
 
 // TraceID returns the trace identifier for the current flow
 func (sc *Context) TraceID() string {
-	return sc.Context.Value(TraceIDKey).(string)
+	traceID := sc.Context.Value(TraceIDKey)
+
+	if id, ok := traceID.(string); ok {
+		return id
+	}
+
+	return ""
 }
 
 // FromContext returns a new Context from a context.Context

@@ -5,14 +5,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type mockSleep struct {
 	Counter int
 }
 
-func (m *mockSleep) Sleep(d time.Duration) {
+func (m *mockSleep) Sleep(time.Duration) {
 	m.Counter = m.Counter + 1
 }
 
@@ -29,9 +29,9 @@ func TestExecuteSuccessNoRetries(t *testing.T) {
 
 	result, err := Execute(config, task)
 
-	assert.NoError(t, err)
-	assert.Equal(t, "my result", result)
-	assert.Equal(t, 0, mockSleep.Counter)
+	require.NoError(t, err)
+	require.Equal(t, "my result", result)
+	require.Equal(t, 0, mockSleep.Counter)
 }
 
 func TestExecuteSuccessNoRetriesWithDefaultConstructor(t *testing.T) {
@@ -41,8 +41,8 @@ func TestExecuteSuccessNoRetriesWithDefaultConstructor(t *testing.T) {
 
 	result, err := Execute(NewConfig(3), task)
 
-	assert.NoError(t, err)
-	assert.Equal(t, "my result", result)
+	require.NoError(t, err)
+	require.Equal(t, "my result", result)
 }
 
 func TestExecuteSuccessAfterRetries(t *testing.T) {
@@ -68,9 +68,9 @@ func TestExecuteSuccessAfterRetries(t *testing.T) {
 
 	result, err := Execute(config, task)
 
-	assert.NoError(t, err)
-	assert.Equal(t, "My result", result)
-	assert.Equal(t, 2, mockSleep.Counter)
+	require.NoError(t, err)
+	require.Equal(t, "My result", result)
+	require.Equal(t, 2, mockSleep.Counter)
 }
 
 func TestExecuteSuccessAfterRetriesWithCustomExponentialBackoff(t *testing.T) {
@@ -99,9 +99,9 @@ func TestExecuteSuccessAfterRetriesWithCustomExponentialBackoff(t *testing.T) {
 
 	result, err := Execute(config, task)
 
-	assert.NoError(t, err)
-	assert.Equal(t, "My result", result)
-	assert.Equal(t, 2, mockSleep.Counter)
+	require.NoError(t, err)
+	require.Equal(t, "My result", result)
+	require.Equal(t, 2, mockSleep.Counter)
 }
 
 func TestExecuteAlwaysError(t *testing.T) {
@@ -120,7 +120,7 @@ func TestExecuteAlwaysError(t *testing.T) {
 
 	result, err := Execute(config, task)
 
-	assert.Error(t, expectedErr, err)
-	assert.Equal(t, 0, result)
-	assert.Equal(t, 2, mockSleep.Counter)
+	require.ErrorIs(t, expectedErr, err)
+	require.Equal(t, 0, result)
+	require.Equal(t, 2, mockSleep.Counter)
 }

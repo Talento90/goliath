@@ -1,6 +1,7 @@
 package httperror
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -43,12 +44,13 @@ func (pd ProblemDetails) Error() string {
 const UnknownErrorType = "internal_error"
 
 func New(ctx app.Context, err error, instance string) ProblemDetails {
-	appError, ok := err.(app.Error)
+	appError := app.Error{}
+	ok := errors.As(err, &appError)
 
 	if !ok {
 		return ProblemDetails{
 			Type:     UnknownErrorType,
-			Title:    "An error ocurred, please contact support.",
+			Title:    "An error occurred, please contact support.",
 			Status:   500,
 			TraceID:  ctx.TraceID(),
 			Instance: instance,
@@ -59,14 +61,14 @@ func New(ctx app.Context, err error, instance string) ProblemDetails {
 		Type:     appError.Code(),
 		Title:    appError.Error(),
 		Detail:   appError.Detail(),
-		Status:   mapAppErrorToHttpStatusCode(appError),
+		Status:   mapAppErrorToHTTPStatusCode(appError),
 		Instance: instance,
 		TraceID:  ctx.TraceID(),
 		Errors:   appError.ValidationErrors(),
 	}
 }
 
-func mapAppErrorToHttpStatusCode(appError app.Error) int {
+func mapAppErrorToHTTPStatusCode(appError app.Error) int {
 	switch appError.Type() {
 	case app.Validation:
 		return http.StatusBadRequest
@@ -74,7 +76,7 @@ func mapAppErrorToHttpStatusCode(appError app.Error) int {
 		return http.StatusNotFound
 	case app.Permission:
 		return http.StatusForbidden
-	case app.Unauthorized:
+	case app.Unauthorised:
 		return http.StatusUnauthorized
 	case app.Conflict:
 		return http.StatusConflict

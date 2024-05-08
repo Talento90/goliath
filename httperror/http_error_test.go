@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/Talento90/goliath/app"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestNewProblemDetailWithapp(t *testing.T) {
@@ -16,14 +17,14 @@ func TestNewProblemDetailWithapp(t *testing.T) {
 	err := app.NewInternalError("insuffient_funds", "No funds available").SetDetail("The account does not have enough funds to execute the transaction.")
 
 	httpErr := New(appCtx, err, "/payments")
-	assert.Equal(t, err.Code(), httpErr.Type)
-	assert.Equal(t, err.Error(), httpErr.Title)
-	assert.Equal(t, err.Detail(), httpErr.Detail)
-	assert.Equal(t, "/payments", httpErr.Instance)
-	assert.Equal(t, 500, httpErr.Status)
-	assert.Equal(t, appCtx.TraceID(), httpErr.TraceID)
+	require.Equal(t, err.Code(), httpErr.Type)
+	require.Equal(t, err.Error(), httpErr.Title)
+	require.Equal(t, err.Detail(), httpErr.Detail)
+	require.Equal(t, "/payments", httpErr.Instance)
+	require.Equal(t, 500, httpErr.Status)
+	require.Equal(t, appCtx.TraceID(), httpErr.TraceID)
 
-	assert.Equal(t, "insuffient_funds: No funds available", httpErr.Error())
+	require.Equal(t, "insuffient_funds: No funds available", httpErr.Error())
 }
 
 func TestNewProblemDetailStatusCodeMapping(t *testing.T) {
@@ -63,8 +64,8 @@ func TestNewProblemDetailStatusCodeMapping(t *testing.T) {
 			expectedStatusCode: http.StatusRequestTimeout,
 		},
 		{
-			name:               "map to unauthorized",
-			errType:            app.Unauthorized,
+			name:               "map to unauthorised",
+			errType:            app.Unauthorised,
 			expectedStatusCode: http.StatusUnauthorized,
 		},
 		{
@@ -80,7 +81,7 @@ func TestNewProblemDetailStatusCodeMapping(t *testing.T) {
 			err := app.NewError("insuffient_funds", tc.errType, app.Low, "No funds available")
 
 			httpErr := New(appCtx, err, "/payments")
-			assert.Equal(t, tc.expectedStatusCode, httpErr.Status)
+			require.Equal(t, tc.expectedStatusCode, httpErr.Status)
 		})
 	}
 }
@@ -94,20 +95,20 @@ func TestNewProblemDetailWithappAndValidationErrors(t *testing.T) {
 
 	httpErr := New(appCtx, err, "/payments")
 
-	assert.Equal(t, err.Code(), httpErr.Type)
-	assert.Equal(t, err.Error(), httpErr.Title)
-	assert.Equal(t, "/payments", httpErr.Instance)
-	assert.Equal(t, 400, httpErr.Status)
-	assert.Equal(t, appCtx.TraceID(), httpErr.TraceID)
-	assert.Equal(t, err.ValidationErrors(), httpErr.Errors)
+	require.Equal(t, err.Code(), httpErr.Type)
+	require.Equal(t, err.Error(), httpErr.Title)
+	require.Equal(t, "/payments", httpErr.Instance)
+	require.Equal(t, 400, httpErr.Status)
+	require.Equal(t, appCtx.TraceID(), httpErr.TraceID)
+	require.Equal(t, err.ValidationErrors(), httpErr.Errors)
 
-	errJson, jsonErr := json.Marshal(httpErr)
+	errJSON, jsonErr := json.Marshal(httpErr)
 
-	assert.NoError(t, jsonErr)
+	require.NoError(t, jsonErr)
 
-	expectedJson := "{\"type\":\"invalid_payment_data\",\"title\":\"The payment request is invalid\",\"status\":400,\"instance\":\"/payments\",\"traceId\":\"9b1b4579-b455-4eed-ac80-923668593dcc\",\"errors\":{\"amount\":[\"Amount needs to be positive\"],\"currency\":[\"currency is required\"]}}"
+	expectedJSON := "{\"type\":\"invalid_payment_data\",\"title\":\"The payment request is invalid\",\"status\":400,\"instance\":\"/payments\",\"traceId\":\"9b1b4579-b455-4eed-ac80-923668593dcc\",\"errors\":{\"amount\":[\"Amount needs to be positive\"],\"currency\":[\"currency is required\"]}}"
 
-	assert.Equal(t, expectedJson, string(errJson))
+	require.Equal(t, expectedJSON, string(errJSON))
 }
 
 func TestNewProblemDetailWithGenericError(t *testing.T) {
@@ -116,10 +117,10 @@ func TestNewProblemDetailWithGenericError(t *testing.T) {
 
 	httpErr := New(appCtx, err, "/payments")
 
-	assert.Equal(t, UnknownErrorType, httpErr.Type)
-	assert.Equal(t, "An error ocurred, please contact support.", httpErr.Title)
-	assert.Equal(t, "", httpErr.Detail)
-	assert.Equal(t, "/payments", httpErr.Instance)
-	assert.Equal(t, 500, httpErr.Status)
-	assert.Equal(t, appCtx.TraceID(), httpErr.TraceID)
+	require.Equal(t, UnknownErrorType, httpErr.Type)
+	require.Equal(t, "An error occurred, please contact support.", httpErr.Title)
+	require.Equal(t, "", httpErr.Detail)
+	require.Equal(t, "/payments", httpErr.Instance)
+	require.Equal(t, 500, httpErr.Status)
+	require.Equal(t, appCtx.TraceID(), httpErr.TraceID)
 }

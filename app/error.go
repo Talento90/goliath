@@ -12,8 +12,8 @@ const (
 	Validation ErrorType = "validation"
 	// Permission error
 	Permission ErrorType = "permission"
-	// Unauthorized error
-	Unauthorized ErrorType = "unauthorized"
+	// Unauthorised error
+	Unauthorised ErrorType = "unauthorised"
 	// Conflict error
 	Conflict ErrorType = "conflict"
 	// Timeout error
@@ -89,7 +89,7 @@ func (e Error) Severity() ErrorSeverity {
 }
 
 // Set the original error severity
-func (e Error) SetSeverity(severity ErrorSeverity) Error {
+func (e *Error) SetSeverity(severity ErrorSeverity) *Error {
 	e.severity = severity
 	return e
 }
@@ -100,13 +100,13 @@ func (e Error) Detail() string {
 }
 
 // Set the erro detail
-func (e Error) SetDetail(detail string) Error {
+func (e *Error) SetDetail(detail string) *Error {
 	e.detail = detail
 	return e
 }
 
 // wrap the original error cause
-func (e Error) Wrap(err error) Error {
+func (e *Error) Wrap(err error) *Error {
 	e.cause = err
 	return e
 }
@@ -130,8 +130,8 @@ func (e *Error) AddValidationError(err FieldValidationError) {
 }
 
 // NewError creates a application new error
-func NewError(code string, errType ErrorType, severity ErrorSeverity, msg string) Error {
-	return Error{
+func NewError(code string, errType ErrorType, severity ErrorSeverity, msg string) *Error {
+	return &Error{
 		code:     code,
 		errType:  errType,
 		severity: severity,
@@ -140,41 +140,41 @@ func NewError(code string, errType ErrorType, severity ErrorSeverity, msg string
 }
 
 // NewInternalError creates an error of type internal
-func NewInternalError(code string, msg string) Error {
+func NewInternalError(code string, msg string) *Error {
 	return NewError(code, Internal, High, msg)
 }
 
 // NewValidationError creates an error of type validation
-func NewValidationError(code string, msg string) Error {
+func NewValidationError(code string, msg string) *Error {
 	return NewError(code, Validation, Low, msg)
 }
 
 // NewNotFoundError creates an error of type not found
-func NewNotFoundError(code string, msg string) Error {
+func NewNotFoundError(code string, msg string) *Error {
 	return NewError(code, NotFound, Low, msg)
 }
 
 // NewPermissionError creates an error of type permission
-func NewPermissionError(code string, msg string) Error {
+func NewPermissionError(code string, msg string) *Error {
 	return NewError(code, Permission, Low, msg)
 }
 
-// NewUnauthorizedError creates an error of type unauthorized
-func NewUnauthorizedError(code string, msg string) Error {
-	return NewError(code, Unauthorized, Low, msg)
+// NewUnauthorisedError creates an error of type unauthorised
+func NewUnauthorisedError(code string, msg string) *Error {
+	return NewError(code, Unauthorised, Low, msg)
 }
 
 // NewConflictError creates an error of type conflict
-func NewConflictError(code string, msg string) Error {
+func NewConflictError(code string, msg string) *Error {
 	return NewError(code, Conflict, Low, msg)
 }
 
 // NewTimeoutError creates an error of type timeout
-func NewTimeoutError(code string, msg string) Error {
+func NewTimeoutError(code string, msg string) *Error {
 	return NewError(code, Timeout, Low, msg)
 }
 
 // NewCancelledError creates an error of type cancelled
-func NewCancelledError(code string, msg string) Error {
+func NewCancelledError(code string, msg string) *Error {
 	return NewError(code, Cancelled, Low, msg)
 }

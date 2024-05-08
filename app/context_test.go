@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNewContext(t *testing.T) {
@@ -13,11 +13,11 @@ func TestNewContext(t *testing.T) {
 
 	ctx := NewContext(parentCtx)
 
-	assert.NotEmpty(t, ctx.TraceID())
+	require.NotEmpty(t, ctx.TraceID())
 
 	_, err := uuid.Parse(ctx.TraceID())
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func TestFromContext(t *testing.T) {
@@ -31,30 +31,30 @@ func TestFromContext(t *testing.T) {
 
 	ctx := FromContext(parentCtx)
 
-	assert.Equal(t, expectedTraceID, ctx.TraceID())
+	require.Equal(t, expectedTraceID, ctx.TraceID())
 
 	userID, checkUser := ctx.UserID()
-	assert.Equal(t, expectedUserID, userID)
-	assert.True(t, checkUser)
+	require.Equal(t, expectedUserID, userID)
+	require.True(t, checkUser)
 
 	tenantID, checkTenant := ctx.TenantID()
-	assert.Equal(t, expectedTenantID, tenantID)
-	assert.True(t, checkTenant)
+	require.Equal(t, expectedTenantID, tenantID)
+	require.True(t, checkTenant)
 }
 
 func TestFromEmptyContext(t *testing.T) {
 	parentCtx := context.Background()
 	ctx := FromContext(parentCtx)
 
-	assert.NotEmpty(t, ctx.TraceID())
+	require.NotEmpty(t, ctx.TraceID())
 
 	userID, checkUser := ctx.UserID()
-	assert.Equal(t, "", userID)
-	assert.False(t, checkUser)
+	require.Equal(t, "", userID)
+	require.False(t, checkUser)
 
 	tenantID, checkTenant := ctx.TenantID()
-	assert.Equal(t, "", tenantID)
-	assert.False(t, checkTenant)
+	require.Equal(t, "", tenantID)
+	require.False(t, checkTenant)
 }
 
 func TestContextCancellation(t *testing.T) {
@@ -64,5 +64,5 @@ func TestContextCancellation(t *testing.T) {
 
 	cancel()
 
-	assert.Equal(t, context.Canceled, ctx.Err())
+	require.Equal(t, context.Canceled, ctx.Err())
 }
