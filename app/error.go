@@ -5,35 +5,35 @@ type ErrorType string
 
 const (
 	// Internal error
-	Internal ErrorType = "internal"
+	ErrorInternal ErrorType = "internal"
 	// NotFound error
-	NotFound ErrorType = "not_found"
+	ErrorNotFound ErrorType = "not_found"
 	// Validation error
-	Validation ErrorType = "validation"
+	ErrorValidation ErrorType = "validation"
 	// Permission error
-	Permission ErrorType = "permission"
+	ErrorPermission ErrorType = "permission"
 	// Unauthorised error
-	Unauthorised ErrorType = "unauthorised"
+	ErrorUnauthorised ErrorType = "unauthorised"
 	// Conflict error
-	Conflict ErrorType = "conflict"
+	ErrorConflict ErrorType = "conflict"
 	// Timeout error
-	Timeout ErrorType = "timeout"
+	ErrorTimeout ErrorType = "timeout"
 	// Cancelled error
-	Cancelled ErrorType = "cancelled"
+	ErrorCancelled ErrorType = "cancelled"
 )
 
 // Error Severity
 type ErrorSeverity string
 
 const (
-	// Low - expected errors like validation
-	Low ErrorSeverity = "low"
-	// Medium - errors that are not urgent to look into.
-	Medium ErrorSeverity = "medium"
-	// High - errors that shouldn't happen but the system is still working.
-	High ErrorSeverity = "high"
-	// Critical - errors that impact the system from working.
-	Critical ErrorSeverity = "critical"
+	// ErrorSeverityLow - expected errors like validation
+	ErrorSeverityLow ErrorSeverity = "low"
+	// ErrorSeverityMedium - errors that are not urgent to look into.
+	ErrorSeverityMedium ErrorSeverity = "medium"
+	// ErrorSeverityHigh - errors that shouldn't happen but the system is still working.
+	ErrorSeverityHigh ErrorSeverity = "high"
+	// ErrorSeverityCritical - errors that impact the system from working.
+	ErrorSeverityCritical ErrorSeverity = "critical"
 )
 
 // Validation Error
@@ -139,42 +139,42 @@ func NewError(code string, errType ErrorType, severity ErrorSeverity, msg string
 	}
 }
 
-// NewInternalError creates an error of type internal
-func NewInternalError(code string, msg string) *Error {
-	return NewError(code, Internal, High, msg)
+// NewErrorInternal creates an error of type internal
+func NewErrorInternal(code string, msg string) *Error {
+	return NewError(code, ErrorInternal, ErrorSeverityHigh, msg)
 }
 
-// NewValidationError creates an error of type validation
-func NewValidationError(code string, msg string) *Error {
-	return NewError(code, Validation, Low, msg)
+// NewErrorValidation creates an error of type validation
+func NewErrorValidation(code string, msg string) *Error {
+	return NewError(code, ErrorValidation, ErrorSeverityLow, msg)
 }
 
-// NewNotFoundError creates an error of type not found
-func NewNotFoundError(code string, msg string) *Error {
-	return NewError(code, NotFound, Low, msg)
+// NewErrorNotFound creates an error of type not found
+func NewErrorNotFound(code string, msg string) *Error {
+	return NewError(code, ErrorNotFound, ErrorSeverityLow, msg)
 }
 
-// NewPermissionError creates an error of type permission
-func NewPermissionError(code string, msg string) *Error {
-	return NewError(code, Permission, Low, msg)
+// NewErrorPermission creates an error of type permission
+func NewErrorPermission(code string, msg string) *Error {
+	return NewError(code, ErrorPermission, ErrorSeverityLow, msg)
 }
 
-// NewUnauthorisedError creates an error of type unauthorised
-func NewUnauthorisedError(code string, msg string) *Error {
-	return NewError(code, Unauthorised, Low, msg)
+// NewErrorUnauthorised creates an error of type unauthorised
+func NewErrorUnauthorised(code string, msg string) *Error {
+	return NewError(code, ErrorUnauthorised, ErrorSeverityLow, msg)
 }
 
-// NewConflictError creates an error of type conflict
-func NewConflictError(code string, msg string) *Error {
-	return NewError(code, Conflict, Low, msg)
+// NewErrorConflict creates an error of type conflict
+func NewErrorConflict(code string, msg string) *Error {
+	return NewError(code, ErrorConflict, ErrorSeverityLow, msg)
 }
 
-// NewTimeoutError creates an error of type timeout
-func NewTimeoutError(code string, msg string) *Error {
-	return NewError(code, Timeout, Low, msg)
+// NewErrorTimeout creates an error of type timeout
+func NewErrorTimeout(code string, msg string) *Error {
+	return NewError(code, ErrorTimeout, ErrorSeverityLow, msg)
 }
 
-// NewCancelledError creates an error of type cancelled
-func NewCancelledError(code string, msg string) *Error {
-	return NewError(code, Cancelled, Low, msg)
+// NewErrorCancelled creates an error of type cancelled
+func NewErrorCancelled(code string, msg string) *Error {
+	return NewError(code, ErrorCancelled, ErrorSeverityLow, msg)
 }

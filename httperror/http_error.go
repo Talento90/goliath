@@ -70,19 +70,19 @@ func New(ctx app.Context, err error, instance string) ProblemDetails {
 
 func mapAppErrorToHTTPStatusCode(appError app.Error) int {
 	switch appError.Type() {
-	case app.Validation:
+	case app.ErrorValidation:
 		return http.StatusBadRequest
-	case app.NotFound:
+	case app.ErrorNotFound:
 		return http.StatusNotFound
-	case app.Permission:
+	case app.ErrorPermission:
 		return http.StatusForbidden
-	case app.Unauthorised:
+	case app.ErrorUnauthorised:
 		return http.StatusUnauthorized
-	case app.Conflict:
+	case app.ErrorConflict:
 		return http.StatusConflict
-	case app.Timeout:
+	case app.ErrorTimeout:
 		return http.StatusRequestTimeout
-	case app.Cancelled:
+	case app.ErrorCancelled:
 		return http.StatusAccepted
 	default:
 		return http.StatusInternalServerError

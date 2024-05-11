@@ -20,7 +20,7 @@ func TestNewContext(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestFromContext(t *testing.T) {
+func TestNewContextWithValues(t *testing.T) {
 	expectedTraceID := "asd-asd-123-asd"
 	expectedUserID := "c6d7dc51-c2a5-4aed-91fc-6f151342f9e2"
 	expectedTenantID := "c6ad12dc51-c2a5-asd-91fc-6f151342f9e2"
@@ -29,7 +29,7 @@ func TestFromContext(t *testing.T) {
 	parentCtx = context.WithValue(parentCtx, UserIDKey, expectedUserID)
 	parentCtx = context.WithValue(parentCtx, TenantIDKey, expectedTenantID)
 
-	ctx := FromContext(parentCtx)
+	ctx := NewContext(parentCtx)
 
 	require.Equal(t, expectedTraceID, ctx.TraceID())
 
@@ -44,16 +44,16 @@ func TestFromContext(t *testing.T) {
 
 func TestFromEmptyContext(t *testing.T) {
 	parentCtx := context.Background()
-	ctx := FromContext(parentCtx)
+	ctx := NewContext(parentCtx)
 
 	require.NotEmpty(t, ctx.TraceID())
 
 	userID, checkUser := ctx.UserID()
-	require.Equal(t, "", userID)
+	require.Empty(t, userID)
 	require.False(t, checkUser)
 
 	tenantID, checkTenant := ctx.TenantID()
-	require.Equal(t, "", tenantID)
+	require.Empty(t, tenantID)
 	require.False(t, checkTenant)
 }
 

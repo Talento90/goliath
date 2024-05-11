@@ -23,12 +23,8 @@ type Context struct {
 // UserID returns the user id
 func (sc *Context) UserID() (string, bool) {
 	userID := sc.Context.Value(UserIDKey)
-
-	if id, ok := userID.(string); ok {
-		return id, ok
-	}
-
-	return "", false
+	id, ok := userID.(string)
+	return id, ok
 }
 
 // SetUserID sets the user id
@@ -41,12 +37,8 @@ func (sc *Context) SetUserID(userID string) *Context {
 // TenantID returns the tenant id
 func (sc *Context) TenantID() (string, bool) {
 	tenantIDKey := sc.Context.Value(TenantIDKey)
-
-	if id, ok := tenantIDKey.(string); ok {
-		return id, true
-	}
-
-	return "", false
+	id, ok := tenantIDKey.(string)
+	return id, ok
 }
 
 // SetTenantID sets the user id
@@ -66,35 +58,22 @@ func (sc *Context) SetTraceID(traceID string) *Context {
 // TraceID returns the trace identifier for the current flow
 func (sc *Context) TraceID() string {
 	traceID := sc.Context.Value(TraceIDKey)
+	id, ok := traceID.(string)
 
-	if id, ok := traceID.(string); ok {
-		return id
+	if !ok {
+		return ""
 	}
 
-	return ""
+	return id
 }
 
-// FromContext returns a new Context from a context.Context
-func FromContext(ctx context.Context) Context {
-	appCtx := NewContext(ctx)
+// NewContext returns a new Context from a context.Context
+func NewContext(ctx context.Context) Context {
+	appCtx := Context{Context: ctx}
 
-	if traceID, ok := ctx.Value(TraceIDKey).(string); ok {
-		appCtx.SetTraceID(traceID)
-	}
-
-	if userID, ok := ctx.Value(UserIDKey).(string); ok {
-		appCtx.SetUserID(userID)
-	}
-
-	if tenantID, ok := ctx.Value(TenantIDKey).(string); ok {
-		appCtx.SetTenantID(tenantID)
+	if _, ok := ctx.Value(TraceIDKey).(string); !ok {
+		appCtx.SetTraceID(uuid.NewString())
 	}
 
 	return appCtx
-}
-
-// NewContext returns a new Context
-func NewContext(ctx context.Context) Context {
-	ctx = context.WithValue(ctx, TraceIDKey, uuid.NewString())
-	return Context{Context: ctx}
 }

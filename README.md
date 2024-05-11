@@ -37,15 +37,15 @@ err.AddValidationError(NewFieldValidationError("age", "user is under 18", "user 
 conn, err := db.Connect(...)
 
 if err != nil {
-   return app.NewInternalError("database_connection", "Error connecting to the database").SetSeverity(app.Critical).Wrap(err)
+   return app.NewErrorInternal("database_connection", "Error connecting to the database").SetSeverity(app.ErrorSeverityCritical).Wrap(err)
 }
 
 // create a raw error
-err := app.NewError(("error_code", app.Internal, app.High, "Error message"))
+err := app.NewError(("error_code", app.ErrorInternal, app.ErrorSeverityHigh, "Error message"))
 
 // enriched context
 func Hello(w http.ResponseWriter, r *http.Request) {
-    ctx := app.FromContext(r.Context())
+    ctx := app.NewContext(r.Context())
     traceId := appCtx.TraceID()
     userID, checkUser := ctx.UserID()
 
@@ -90,7 +90,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 
 ### httperror
 ```go
-	appCtx := app.FromContext(ctx)
+	appCtx := app.NewContext(ctx)
 	err := app.NewValidationError("invalid_payment_data", "The payment request is invalid")
 	err.AddValidationError(app.NewFieldValidationError("amount", "Amount needs to be positive"))
 	err.AddValidationError(app.NewFieldValidationError("currency", "currency is required"))
