@@ -55,20 +55,21 @@ func (sc *Context) SetTraceID(traceID string) *Context {
 	return sc
 }
 
-// TraceID returns the trace identifier for the current flow
+// TraceID returns the trace identifier for the current flow. If not present, it will generate a new UUID.V4 as traceID.
 func (sc *Context) TraceID() string {
 	traceID := sc.Context.Value(TraceIDKey)
 	id, ok := traceID.(string)
 
 	if !ok {
-		return ""
+		id = uuid.NewString()
+		sc.SetTraceID(id)
 	}
 
 	return id
 }
 
-// NewContext returns a new Context from a context.Context
-func NewContext(ctx context.Context) Context {
+// FromContext returns a new Context from a context.Context
+func FromContext(ctx context.Context) Context {
 	appCtx := Context{Context: ctx}
 
 	if _, ok := ctx.Value(TraceIDKey).(string); !ok {

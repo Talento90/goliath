@@ -4,21 +4,21 @@ package app
 type ErrorType string
 
 const (
-	// Internal error
+	// ErrorInternal error
 	ErrorInternal ErrorType = "internal"
-	// NotFound error
+	// ErrorNotFound error
 	ErrorNotFound ErrorType = "not_found"
-	// Validation error
+	// ErrorValidation error
 	ErrorValidation ErrorType = "validation"
-	// Permission error
+	// ErrorPermission error
 	ErrorPermission ErrorType = "permission"
-	// Unauthorised error
+	// ErrorUnauthorised error
 	ErrorUnauthorised ErrorType = "unauthorised"
-	// Conflict error
+	// ErrorConflict error
 	ErrorConflict ErrorType = "conflict"
-	// Timeout error
+	// ErrorTimeout error
 	ErrorTimeout ErrorType = "timeout"
-	// Cancelled error
+	// ErrorCancelled error
 	ErrorCancelled ErrorType = "cancelled"
 )
 
@@ -68,12 +68,12 @@ func (e Error) Error() string {
 	return e.message
 }
 
-// Error message
+// Error code
 func (e Error) Code() string {
 	return e.code
 }
 
-// Error message
+// Error type
 func (e Error) Type() ErrorType {
 	return e.errType
 }
@@ -83,7 +83,7 @@ func (e Error) Cause() error {
 	return e.cause
 }
 
-// Get the original error cause
+// Get the error severity
 func (e Error) Severity() ErrorSeverity {
 	return e.severity
 }
@@ -99,7 +99,7 @@ func (e Error) Detail() string {
 	return e.detail
 }
 
-// Set the erro detail
+// Set the error detail
 func (e *Error) SetDetail(detail string) *Error {
 	e.detail = detail
 	return e

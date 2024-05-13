@@ -29,7 +29,7 @@ Goliath is an opinionated set of libraries to build resilient, scalable and main
 ### app
 ```go
 // create elegant application errors
-err := app.NewValidation("validate_user", "Error Validating User")
+err := app.NewErrorValidation("validate_user", "Error Validating User")
 err.AddValidationError(NewFieldValidationError("name", "name is empty"))
 err.AddValidationError(NewFieldValidationError("age", "user is under 18", "user must be an adult"))
 
@@ -45,7 +45,7 @@ err := app.NewError(("error_code", app.ErrorInternal, app.ErrorSeverityHigh, "Er
 
 // enriched context
 func Hello(w http.ResponseWriter, r *http.Request) {
-    ctx := app.NewContext(r.Context())
+    ctx := app.FromContext(r.Context())
     traceId := appCtx.TraceID()
     userID, checkUser := ctx.UserID()
 
@@ -90,8 +90,8 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 
 ### httperror
 ```go
-	appCtx := app.NewContext(ctx)
-	err := app.NewValidationError("invalid_payment_data", "The payment request is invalid")
+	appCtx := app.FromContext(ctx)
+	err := app.NewErrorValidation("invalid_payment_data", "The payment request is invalid")
 	err.AddValidationError(app.NewFieldValidationError("amount", "Amount needs to be positive"))
 	err.AddValidationError(app.NewFieldValidationError("currency", "currency is required"))
 

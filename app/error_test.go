@@ -26,7 +26,7 @@ func TestAppCriticalErrorWrap(t *testing.T) {
 	require.Equal(t, ErrorSeverityCritical, err.Severity())
 }
 
-func TestNewValidationError(t *testing.T) {
+func TestNewErrorValidation(t *testing.T) {
 	expectedValidationErrs := FieldValidationErrors{
 		"name": []string{"name is empty"},
 		"age":  []string{"user is under 18", "user must be an adult", "user is too young"},
