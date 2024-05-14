@@ -1,11 +1,11 @@
 package httperror
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
-	"github.com/Talento90/goliath/appcontext"
-	"github.com/Talento90/goliath/apperror"
+	"github.com/Talento90/goliath/app"
 )
 
 // Problem Details for HTTP APIs - https://datatracker.ietf.org/doc/html/rfc7807
@@ -34,7 +34,7 @@ type ProblemDetails struct {
 	Status   int                       `json:"status,omitempty"`
 	Instance string                    `json:"instance,omitempty"`
 	TraceID  string                    `json:"traceId,omitempty"`
-	Errors   apperror.ValidationErrors `json:"errors,omitempty"`
+	Errors   app.FieldValidationErrors `json:"errors,omitempty"`
 }
 
 func (pd ProblemDetails) Error() string {
@@ -43,13 +43,14 @@ func (pd ProblemDetails) Error() string {
 
 const UnknownErrorType = "internal_error"
 
-func New(ctx appcontext.AppContext, err error, instance string) ProblemDetails {
-	appError, ok := err.(apperror.AppError)
+func New(ctx app.Context, err error, instance string) ProblemDetails {
+	var appError *app.Error
+	ok := errors.As(err, &appError)
 
 	if !ok {
 		return ProblemDetails{
 			Type:     UnknownErrorType,
-			Title:    "An error ocurred, please contact support.",
+			Title:    "An error occurred, please contact support.",
 			Status:   500,
 			TraceID:  ctx.TraceID(),
 			Instance: instance,
@@ -60,28 +61,28 @@ func New(ctx appcontext.AppContext, err error, instance string) ProblemDetails {
 		Type:     appError.Code(),
 		Title:    appError.Error(),
 		Detail:   appError.Detail(),
-		Status:   mapAppErrorToHttpStatusCode(appError),
+		Status:   mapAppErrorToHTTPStatusCode(*appError),
 		Instance: instance,
 		TraceID:  ctx.TraceID(),
 		Errors:   appError.ValidationErrors(),
 	}
 }
 
-func mapAppErrorToHttpStatusCode(appError apperror.AppError) int {
+func mapAppErrorToHTTPStatusCode(appError app.Error) int {
 	switch appError.Type() {
-	case apperror.Validation:
+	case app.ErrorValidation:
 		return http.StatusBadRequest
-	case apperror.NotFound:
+	case app.ErrorNotFound:
 		return http.StatusNotFound
-	case apperror.Permission:
+	case app.ErrorPermission:
 		return http.StatusForbidden
-	case apperror.Unauthorized:
+	case app.ErrorUnauthorised:
 		return http.StatusUnauthorized
-	case apperror.Conflict:
+	case app.ErrorConflict:
 		return http.StatusConflict
-	case apperror.Timeout:
+	case app.ErrorTimeout:
 		return http.StatusRequestTimeout
-	case apperror.Cancelled:
+	case app.ErrorCancelled:
 		return http.StatusAccepted
 	default:
 		return http.StatusInternalServerError

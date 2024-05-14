@@ -15,6 +15,6 @@ func New() Sleeper {
 }
 
 // Sleep pauses the execution of the current go routine
-func (s sleeper) Sleep(d time.Duration) {
+func (sleeper) Sleep(d time.Duration) {
 	time.Sleep(d)
 }

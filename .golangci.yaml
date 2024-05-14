@@ -222,4 +222,4 @@ linters-settings:
         disabled: true
 
   misspell:
-    locale: "US" # Fix the colour => color, and co
+    locale: "UK" # Fix the colour => color, and co
